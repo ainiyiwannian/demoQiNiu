@@ -1,0 +1,179 @@
+metadata:
+  title: 夜行者
+  genre: 悬疑
+  source_novel: 夜行者
+  total_chapters: 3
+  total_scenes: 6
+  generated_at: "2026-06-05 14:30:00"
+  version: "1.0"
+chapters:
+  - chapter_title: 第一章 雨夜来客
+    scenes:
+      - scene_id: S01
+        location: 城区老咖啡馆
+        time: 深夜，大雨
+        description: |
+          昏黄的灯光，雨声不断敲打着窗户。
+          咖啡馆内只剩零散几张桌椅，老板正在收拾。
+        characters: [林远, 老板]
+        dialogue:
+          - speaker: 老板
+            line: 先生，我们要打烊了。
+            direction: 走过来，语气中带着歉意
+        actions:
+          - character: 林远
+            action: 付账离开
+            description: 从口袋掏出几张皱巴巴的钞票放在桌上，拿起旧伞推门走进雨里
+
+      - scene_id: S02
+        location: 老城区巷子拐角
+        time: 深夜，大雨
+        description: |
+          街灯昏黄，雨水在地面汇成小溪。
+          一个黑衣女人靠在墙上，雨水顺着发梢滴落。
+        characters: [林远, 苏晴]
+        dialogue:
+          - speaker: 苏晴
+            line: 林远。
+            emotion: 低沉沙哑
+            direction: 从阴影中走出来
+          - speaker: 林远
+            line: 你是谁？
+            direction: 握紧伞柄，警觉
+          - speaker: 苏晴
+            line: 我叫苏晴。我需要你帮我找一个人。
+          - speaker: 林远
+            line: 我不做那种事了。
+            direction: 转身要走
+          - speaker: 苏晴
+            line: 是关于你父亲的。
+          - speaker: 林远
+            line: 你说什么？
+            emotion: 震惊
+            direction: 僵住，缓缓转身，目光锐利如刀
+          - speaker: 苏晴
+            line: 三年前失踪的。但上周，有人在城东的废弃工厂看到了他。
+        actions:
+          - character: 苏晴
+            action: 递信封
+            description: 从包里取出一个信封递过来，信封被雨水打湿了一角
+          - character: 林远
+            action: 接过信封
+            description: 手指微微颤抖，看到熟悉的笔迹
+
+  - chapter_title: 第二章 旧日阴影
+    scenes:
+      - scene_id: S01
+        location: 林远的出租屋
+        time: 清晨
+        description: |
+          逼仄的出租屋，桌上摊开着信封里的东西。
+          一张照片、一封信、一把生锈的钥匙。
+        characters: [林远]
+        dialogue: []
+        actions:
+          - character: 林远
+            action: 查看信封内容
+            description: 桌上摊开照片（父亲站在老宅前，背面写着2021年3月15日）、短信（远儿，真相在松柏路27号。不要相信任何人。）和生锈钥匙
+          - character: 林远
+            action: 回忆
+            description: 点燃一支烟，思绪回到十年前做私家侦探的日子
+
+      - scene_id: S02
+        location: 林远的出租屋门口
+        time: 清晨
+        description: 门铃响起，房东老周递来一个包裹后离开。
+        characters: [林远, 老周]
+        dialogue:
+          - speaker: 老周
+            line: 有人让我转交给你。
+            direction: 递过包裹后离开
+        actions:
+          - character: 林远
+            action: 打开包裹
+            description: 包裹里是一个旧式录音机和一盘磁带
+
+      - scene_id: S03
+        location: 林远的出租屋内
+        time: 清晨
+        description: 录音机播放着神秘的警告信息。
+        characters: [林远]
+        dialogue:
+          - speaker: 陌生声音（录音）
+            line: |
+              林远，如果你听到这段录音，说明苏晴已经找到你了。
+              你父亲不是普通人，他一直在调查一个叫'暗影'的组织。
+              三年前，他接近了真相，然后就消失了。
+              松柏路27号是他留下的线索，但那里很危险。你需要小心。
+        actions:
+          - character: 林远
+            action: 做出决定
+            description: 掐灭烟头，目光坚定，拿起钥匙拨通苏晴电话
+          - character: 林远
+            action: 打电话
+            description: 对苏晴说"松柏路27号，今晚见"
+
+  - chapter_title: 第三章 深入虎穴
+    scenes:
+      - scene_id: S01
+        location: 松柏路27号门前
+        time: 夜晚
+        description: |
+          城市边缘的废弃建筑区，路灯大半损坏。
+          灰色建筑前，门牌依稀可辨"27"。
+        characters: [林远, 苏晴]
+        dialogue:
+          - speaker: 苏晴
+            line: 就是这里。
+            emotion: 低声
+        actions:
+          - character: 林远
+            action: 开锁
+            description: 掏出钥匙试了试，锁发出沉闷的咔嗒声，门开了
+
+      - scene_id: S02
+        location: 松柏路27号内部
+        time: 夜晚
+        description: |
+          长长的走廊，墙壁油漆剥落，弥漫霉味和灰尘。
+          尽头大房间堆满文件柜和纸箱，墙上贴满剪报和照片。
+          每张照片旁都有一个红笔画的黑色太阳符号。
+        characters: [林远, 苏晴]
+        dialogue:
+          - speaker: 苏晴
+            line: 这是……
+            emotion: 倒吸冷气
+          - speaker: 林远
+            line: 调查档案。我父亲这些年一直在秘密调查。
+        actions:
+          - character: 林远
+            action: 翻看文件
+            description: 发现地图上标注了城中多个地点，其中一个被特别圈出——城北明湖仓库
+          - character: 林远
+            action: 指地图
+            description: 指着标记说"他想让我们去这里"
+
+      - scene_id: S03
+        location: 松柏路27号内部
+        time: 夜晚
+        description: |
+          两个黑衣人闯入，气氛骤然紧张。
+          手机震动暴露位置，紧急逃亡。
+        characters: [林远, 苏晴, 黑衣人A, 黑衣人B]
+        dialogue:
+          - speaker: 黑衣人A
+            line: 有人来过这里。
+            emotion: 冰冷
+          - speaker: 黑衣人B
+            line: 检查一下。
+          - speaker: 林远
+            line: 跑！
+            emotion: 急促
+            direction: 拉着苏晴冲向房间另一侧的门
+        actions:
+          - character: 林远
+            action: 躲藏
+            description: 关掉手电筒，拉着苏晴躲到文件柜后面
+          - character: 林远
+            action: 逃跑
+            description: 手机震动暴露位置，拉着苏晴冲向另一侧的门

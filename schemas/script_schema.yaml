@@ -1,0 +1,279 @@
+# ============================================================
+# 剧本 YAML Schema 定义文档
+# Novel-to-Script YAML Schema Definition
+# 版本: 1.0
+# ============================================================
+#
+# 一、设计目标
+# ----------
+# 本 Schema 旨在为「小说 → 剧本」转换提供统一的结构化数据格式，
+# 满足以下核心需求：
+#
+#   1. 完整性：覆盖剧本创作的所有关键要素（场景、对话、动作、情绪）
+#   2. 可编辑性：作者拿到 YAML 后可直接用文本编辑器修改，无需专业工具
+#   3. 可扩展性：支持添加注释、备注、自定义字段，适应不同创作需求
+#   4. 机器可读：结构化数据可被后续工具（排版、分镜、字幕软件）直接消费
+#   5. 中文友好：YAML 天然支持 Unicode，中文内容无需转义
+#
+# 二、为什么选择 YAML？
+# ------------------
+#   - 人类可读：比 JSON 更易读，支持注释，适合手写编辑
+#   - 层级清晰：天然表达剧本的「章节 → 场景 → 元素」层级结构
+#   - 多行文本：使用 | 或 > 轻松处理长段落台词或场景描述
+#   - 生态成熟：几乎所有编程语言都有 YAML 解析库
+#   - 版本友好：文本格式，适合 Git 等版本控制系统追踪修改
+#
+# 三、核心设计理念
+# -------------
+#
+#   1. 以「场景(Scene)」为最小叙事单元
+#      剧本的本质是场景序列。每个场景绑定一个固定的时空坐标
+#      （地点 + 时间），所有对话和动作都在这个坐标下发生。
+#      这与影视制作中"一场戏"的概念完全一致。
+#
+#   2. 对话与动作分离
+#      将 dialogue（台词）和 actions（舞台动作）作为独立数组，
+#      而非嵌套在一起。这样做的好处是：
+#      - 导演可以快速浏览所有台词，评估节奏
+#      - 动作指导可以单独查看所有需要编排的动作
+#      - 两者可以独立编辑，互不干扰
+#
+#   3. 情绪与指示附加在台词上
+#      每句台词可选携带 emotion（情绪）和 direction（表演指示），
+#      这是小说改编为剧本的关键——原文中的心理描写需要转化为
+#      可表演的指示。这些字段是可选的，避免过度标注。
+#
+#   4. 元数据与内容分离
+#      顶层 metadata 存储作品信息和统计，chapters 存储内容。
+#      这使得工具可以快速读取基本信息而无需解析全部内容。
+#
+# 四、Schema 详细说明
+# -----------------
+#
+# 根节点结构：
+#   ├── metadata          # 元数据（作品信息、统计、版本）
+#   └── chapters[]        # 章节数组（至少 1 章）
+#       ├── chapter_title  # 章节标题
+#       └── scenes[]       # 场景数组（至少 1 场）
+#
+# ============================================================
+
+# ---- 根节点 ----
+type: object
+required: [metadata, chapters]
+description: 剧本 YAML 文件的根节点
+
+properties:
+
+  # ---- 元数据 ----
+  # 设计原因：将作品信息集中在顶层，便于工具快速读取，
+  # 也便于在不解析全部内容的情况下了解文件概况。
+  metadata:
+    type: object
+    required: [title, genre, source_novel, total_chapters, total_scenes]
+    description: 剧本的元数据信息
+
+    properties:
+      title:
+        type: string
+        description: "剧本标题"
+        example: "夜行者"
+
+      genre:
+        type: string
+        description: |
+          剧本类型/题材。
+          设计为自由文本而非枚举，因为题材分类是开放的
+          （如：剧情、喜剧、悬疑、科幻、历史、爱情等）。
+        example: "悬疑"
+
+      source_novel:
+        type: string
+        description: |
+          原著小说名称。
+          保留原著信息便于溯源和版权管理。
+        example: "夜行者"
+
+      total_chapters:
+        type: integer
+        minimum: 1
+        description: "总章节数（冗余字段，便于快速了解规模）"
+
+      total_scenes:
+        type: integer
+        minimum: 1
+        description: "总场景数（冗余字段，便于快速了解规模）"
+
+      generated_at:
+        type: string
+        format: date-time
+        description: "生成时间戳"
+        example: "2026-06-05 14:30:00"
+
+      version:
+        type: string
+        description: "Schema 版本号"
+        example: "1.0"
+
+  # ---- 章节数组 ----
+  # 设计原因：章节对应原著的叙事结构，保留章节划分
+  # 便于与原著对照，也方便分批编辑和审阅。
+  chapters:
+    type: array
+    minItems: 1
+    description: "剧本章节列表"
+
+    items:
+      type: object
+      required: [chapter_title, scenes]
+      description: "单个章节"
+
+      properties:
+        chapter_title:
+          type: string
+          description: |
+            章节标题。
+            保留原著章节标题，便于与原文对照。
+          example: "第一章 雨夜来客"
+
+        # ---- 场景数组 ----
+        # 设计原因：场景是剧本的最小叙事单元。
+        # 每个场景对应一个固定的时空环境，
+        # 场景切换意味着地点或时间的变化。
+        scenes:
+          type: array
+          minItems: 1
+          description: "章节内的场景列表"
+
+          items:
+            type: object
+            required: [scene_id, location, time, description]
+            description: "单个场景"
+
+            properties:
+              scene_id:
+                type: string
+                pattern: "^S\\d{2,}$"
+                description: |
+                  场景编号。
+                  格式为 S01, S02, ...（S + 两位以上数字）。
+                  设计原因：
+                  - 提供唯一标识，便于跨章节引用
+                  - 两位数字支持最多 99 场景/章，足够长篇小说
+                  - S 前缀避免与纯数字混淆
+                example: "S01"
+
+              location:
+                type: string
+                description: |
+                  场景地点。
+                  应足够具体，便于美术指导理解空间需求。
+                example: "城东废弃工厂门口"
+
+              time:
+                type: string
+                description: |
+                  时间。
+                  使用自然语言描述（白天、夜晚、清晨、黄昏等），
+                  而非精确时刻，因为剧本中的时间更多是氛围概念。
+                example: "深夜，大雨"
+
+              description:
+                type: string
+                description: |
+                  场景的视觉/氛围描述。
+                  相当于舞台指示中的场景说明，
+                  帮助导演和美术团队理解这个场景的基调。
+                  支持多行文本（使用 YAML 的 | 语法）。
+                example: |
+                  昏黄的灯光，雨声不断敲打着窗户。
+                  咖啡馆内只剩零散几张桌椅。
+
+              # ---- 人物列表 ----
+              # 设计原因：显式列出出场人物，便于：
+              # 1. 演员/选角团队快速了解每场需要的演员
+              # 2. 工具自动生成人物出场统计
+              # 3. 避免从对话中反向推导人物的不确定性
+              characters:
+                type: array
+                items:
+                  type: string
+                description: "出场人物列表"
+                example: ["林远", "苏晴"]
+
+              # ---- 对话 ----
+              # 设计原因：对话是剧本的核心。
+              # 将 emotion 和 direction 设为可选字段，因为：
+              # - 不是每句台词都需要标注情绪
+              # - 初稿阶段可能只关注台词本身
+              # - 作者可以逐步添加细节，渐进式完善
+              dialogue:
+                type: array
+                description: "对话列表，按出场顺序排列"
+
+                items:
+                  type: object
+                  required: [speaker, line]
+                  description: "单句对话"
+
+                  properties:
+                    speaker:
+                      type: string
+                      description: "说话者姓名（应与 characters 列表中的名称一致）"
+                      example: "林远"
+
+                    line:
+                      type: string
+                      description: "台词内容"
+                      example: "你是谁？"
+
+                    emotion:
+                      type: string
+                      description: |
+                        情绪/语气标注。
+                        可选字段。帮助演员理解台词的情感基调。
+                        使用简短的形容词（如：愤怒、平静、颤抖、嘲讽）。
+                      example: "震惊"
+
+                    direction:
+                      type: string
+                      description: |
+                        表演指示/舞台指示。
+                        可选字段。描述说话时的动作或姿态，
+                        相当于剧本中的括号注释(parenthetical)。
+                      example: "握紧伞柄，目光锐利"
+
+              # ---- 动作 ----
+              # 设计原因：动作与对话分离，是因为：
+              # 1. 动作是视觉叙事的一部分，与台词有不同的创作逻辑
+              # 2. 动作指导需要独立审查所有需要编排的动作
+              # 3. 某些场景可能只有动作没有对话（如追逐戏）
+              actions:
+                type: array
+                description: "舞台动作/事件列表"
+
+                items:
+                  type: object
+                  required: [character, action, description]
+                  description: "单个舞台动作"
+
+                  properties:
+                    character:
+                      type: string
+                      description: "执行动作的人物"
+                      example: "林远"
+
+                    action:
+                      type: string
+                      description: |
+                        动作类型（简短动词）。
+                        便于分类和检索（如：走、跑、打、拿、看）。
+                      example: "接过信封"
+
+                    description:
+                      type: string
+                      description: |
+                        动作的详细描述。
+                        包含动作的方式、幅度、情感色彩等，
+                        帮助演员理解和执行。
+                      example: "手指微微颤抖，看到熟悉的笔迹"

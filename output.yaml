@@ -1,0 +1,277 @@
+metadata:
+  title: sample_novel.txt
+  genre: 剧情
+  source_novel: sample_novel.txt
+  total_chapters: 4
+  total_scenes: 11
+  generated_at: '2026-06-05 13:29:21'
+  version: '1.0'
+chapters:
+- chapter_title: 序章
+  scenes:
+  - scene_id: S01
+    location: 城市街道
+    time: 深夜
+    description: 昏暗的路灯下，空无一人的街道笼罩在薄雾中。远处偶尔传来几声犬吠。
+    characters:
+    - 夜行者
+    actions:
+    - character: 夜行者
+      action: 走
+      description: 一个黑影无声地掠过街道，像一阵风
+    - character: 夜行者
+      action: 停
+      description: 突然在路灯下停住，警惕地环顾四周
+- chapter_title: 第一章 雨夜来客
+  scenes:
+  - scene_id: S01
+    location: 咖啡馆内
+    time: 夜晚
+    description: 雨声敲打窗户，咖啡馆内灯光昏暗，桌椅正在被收拾
+    characters:
+    - 林远
+    - 老板
+    dialogue:
+    - speaker: 老板
+      line: 先生，我们要打烊了。
+      emotion: 歉意
+      direction: 走向林远
+    actions:
+    - character: 林远
+      action: 看
+      description: 站在窗前看着街道
+    - character: 林远
+      action: 放
+      description: 掏出皱巴巴的钞票放在桌上
+    - character: 林远
+      action: 拿
+      description: 拿起旧伞
+    - character: 林远
+      action: 走
+      description: 推门走进雨中
+  - scene_id: S02
+    location: 老城区巷子
+    time: 夜晚
+    description: 街灯昏黄，雨水形成小溪，脚步声在空荡的巷子里回响
+    characters:
+    - 林远
+    - 苏晴
+    dialogue:
+    - speaker: 苏晴
+      line: 林远。
+      emotion: 低沉
+      direction: 从阴影中出声
+    - speaker: 林远
+      line: 你是谁？
+      emotion: 警惕
+      direction: 握紧伞柄
+    - speaker: 苏晴
+      line: 我叫苏晴。我需要你帮我找一个人。
+      emotion: 冷静
+      direction: 走出阴影
+    - speaker: 林远
+      line: 我不做那种事了。
+      emotion: 冷淡
+      direction: 转身要走
+    - speaker: 苏晴
+      line: 是关于你父亲的。
+      emotion: 意味深长
+      direction: 对着林远背影说
+    - speaker: 林远
+      line: 你说什么？
+      emotion: 震惊
+      direction: 猛地转身
+    - speaker: 林远
+      line: 他在哪？
+      emotion: 低沉
+      direction: 盯着信封
+    - speaker: 苏晴
+      line: 三年前失踪的。但上周，有人在城东的废弃工厂看到了他。
+      emotion: 平静
+      direction: 直视林远眼睛
+    actions:
+    - character: 林远
+      action: 走
+      description: 沿着巷子行走，靴子踩出水花
+    - character: 苏晴
+      action: 靠
+      description: 靠在拐角墙边
+    - character: 林远
+      action: 停
+      description: 突然停下脚步
+    - character: 苏晴
+      action: 递
+      description: 从包中取出湿漉漉的信封
+    - character: 林远
+      action: 接
+      description: 手指颤抖地接过信封
+- chapter_title: 第二章 旧日阴影
+  scenes:
+  - scene_id: S01
+    location: 林远的出租屋
+    time: 清晨
+    description: 逼仄的房间，桌上散落着信封里的物品：照片、信件和一把生锈的钥匙。
+    characters:
+    - 林远
+    actions:
+    - character: 林远
+      action: 坐
+      description: 坐在桌前，盯着桌上的物品
+    - character: 林远
+      action: 点燃
+      description: 点燃一支烟，陷入沉思
+  - scene_id: S02
+    location: 林远的出租屋门口
+    time: 清晨
+    description: 门铃响起，林远透过猫眼观察。
+    characters:
+    - 林远
+    - 房东老周
+    dialogue:
+    - speaker: 房东老周
+      line: 有人让我转交给你。
+      emotion: 平静
+      direction: 递过包裹
+    actions:
+    - character: 林远
+      action: 看
+      description: 透过猫眼看了一眼
+    - character: 林远
+      action: 开
+      description: 打开门
+  - scene_id: S03
+    location: 林远的出租屋内
+    time: 清晨
+    description: 林远独自在屋内播放录音带，录音机发出沙沙声。
+    characters:
+    - 林远
+    - 录音带声音
+    dialogue:
+    - speaker: 录音带声音
+      line: 林远，如果你听到这段录音，说明苏晴已经找到你了。你父亲不是普通人，他一直在调查一个叫'暗影'的组织。三年前，他接近了真相，然后就消失了。松柏路27号是他留下的线索，但那里很危险。你需要小心。
+      emotion: 紧张
+      direction: 录音带播放
+    actions:
+    - character: 林远
+      action: 按
+      description: 按下录音机播放键
+    - character: 林远
+      action: 掐灭
+      description: 掐灭烟头
+  - scene_id: S04
+    location: 林远的出租屋内
+    time: 清晨
+    description: 林远拿起钥匙，打电话给苏晴。
+    characters:
+    - 林远
+    - 苏晴
+    dialogue:
+    - speaker: 林远
+      line: 松柏路27号，今晚见。
+      emotion: 坚定
+      direction: 对着电话说
+    actions:
+    - character: 林远
+      action: 拿起
+      description: 拿起生锈的钥匙
+    - character: 林远
+      action: 塞
+      description: 将钥匙塞进口袋
+    - character: 林远
+      action: 拨通
+      description: 拨通苏晴的电话
+- chapter_title: 第三章 深入虎穴
+  scenes:
+  - scene_id: S01
+    location: 松柏路27号建筑外
+    time: 夜晚
+    description: 街道安静诡异，路灯大多损坏，仅剩几盏发出微弱光线。一栋灰色建筑前，门牌号27在昏暗光线下隐约可见。
+    characters:
+    - 林远
+    - 苏晴
+    dialogue:
+    - speaker: 苏晴
+      line: 就是这里。
+      emotion: 低沉
+      direction: 环顾四周
+    actions:
+    - character: 林远
+      action: 掏出
+      description: 从口袋中取出钥匙
+    - character: 林远
+      action: 开锁
+      description: 将钥匙插入门锁转动
+  - scene_id: S02
+    location: 建筑内部走廊
+    time: 夜晚
+    description: 长而幽暗的走廊，墙壁油漆剥落，空气中充满霉味和灰尘。手电筒光束在黑暗中晃动。
+    characters:
+    - 林远
+    - 苏晴
+    actions:
+    - character: 林远
+      action: 持
+      description: 握着手电筒前行
+    - character: 苏晴
+      action: 跟随
+      description: 紧跟在林远身后
+  - scene_id: S03
+    location: 建筑内部大房间
+    time: 夜晚
+    description: 堆满文件柜和纸箱的房间，墙上贴满剪报和照片。每张照片旁都有黑色太阳符号标记。
+    characters:
+    - 林远
+    - 苏晴
+    dialogue:
+    - speaker: 苏晴
+      line: 这是……
+      emotion: 震惊
+      direction: 倒吸冷气
+    - speaker: 林远
+      line: 调查档案。我父亲这些年一直在秘密调查。
+      emotion: 沉重
+      direction: 翻看文件
+    - speaker: 林远
+      line: 这里。他想让我们去这里。
+      emotion: 果断
+      direction: 指着地图
+    actions:
+    - character: 林远
+      action: 发现
+      description: 注意到地图上的明湖仓库标记
+  - scene_id: S04
+    location: 建筑内部大房间
+    time: 夜晚
+    description: 房间内突然紧张起来，门外传来脚步声。
+    characters:
+    - 林远
+    - 苏晴
+    - 黑衣人A
+    - 黑衣人B
+    dialogue:
+    - speaker: 黑衣人A
+      line: 有人来过这里。
+      emotion: 冰冷
+    - speaker: 黑衣人B
+      line: 检查一下。
+      emotion: 命令
+    - speaker: 林远
+      line: 跑！
+      emotion: 急促
+      direction: 拉着苏晴
+    actions:
+    - character: 林远
+      action: 关
+      description: 迅速关闭手电筒
+    - character: 林远
+      action: 躲
+      description: 拉着苏晴躲到文件柜后
+    - character: 苏晴
+      action: 抓
+      description: 紧紧抓住林远手臂
+    - character: 黑衣人A
+      action: 进入
+      description: 推开房门
+    - character: 林远
+      action: 拉
+      description: 拉着苏晴冲向另一侧门

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novel2Script — AI 剧本创作工具</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --bg-card: #1a1d27;
+            --bg-input: #252836;
+            --border: #2d3040;
+            --text: #e4e6ed;
+            --text-dim: #8b8fa3;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --success: #22c55e;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .header .badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--accent-hover);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-header h2 {
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        /* 左侧 - 输入区 */
+        .input-area {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-area .panel-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toolbar .char-count {
+            color: var(--text-dim);
+            font-size: 12px;
+            margin-left: auto;
+        }
+
+        textarea {
+            flex: 1;
+            width: 100%;
+            min-height: 400px;
+            padding: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.8;
+            resize: none;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            outline: none;
+        }
+
+        textarea::placeholder {
+            color: var(--text-dim);
+        }
+
+        /* 右侧 - 配置区 */
+        .config-area {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-dim);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-group input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--bg-card);
+        }
+
+        .slider-value {
+            background: var(--bg-input);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-hover);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            box-shadow: none;
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-input);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #a78bfa);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* 结果区 */
+        .result-area {
+            grid-column: 1 / -1;
+        }
+
+        .result-area .panel-body {
+            padding: 0;
+        }
+
+        .result-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-content {
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .result-content pre {
+            font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c4b5fd;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .stat-item .value {
+            font-weight: 700;
+            color: var(--accent-hover);
+        }
+
+        .stat-item .label {
+            color: var(--text-dim);
+        }
+
+        /* 上传按钮 */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .upload-area .icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .upload-area p {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        /* Toast 提示 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+
+        .toast.success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--success);
+        }
+
+        .toast.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dim);
+        }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .result-area {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div>
+            <h1>Novel2Script</h1>
+            <p>AI 辅助剧本创作工具 — 将小说文本自动转换为结构化 YAML 剧本</p>
+        </div>
+        <span class="badge">v1.0</span>
+    </header>
+
+    <div class="container">
+        <!-- 左侧：小说输入 -->
+        <div class="panel input-area">
+            <div class="panel-header">
+                <h2>📝 小说文本</h2>
+                <div style="display:flex;gap:8px;">
+                    <label class="upload-area" style="margin:0;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;">
+                        <input type="file" id="fileInput" accept=".txt">
+                        <span>📂 上传文件</span>
+                    </label>
+                    <button class="btn-secondary btn" onclick="loadSample()" style="width:auto;padding:6px 12px;">
+                        📄 加载示例
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="toolbar">
+                    <span style="font-size:12px;color:var(--text-dim);">支持 .txt 文件上传或直接粘贴</span>
+                    <span class="char-count" id="charCount">0 字</span>
+                </div>
+                <textarea id="novelText" placeholder="在此粘贴小说文本...&#10;&#10;要求：&#10;- 至少包含 3 个章节&#10;- 支持格式：第X章、Chapter X、一、标题 等"></textarea>
+            </div>
+        </div>
+
+        <!-- 右侧：配置 -->
+        <div class="config-area">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>⚙️ 配置参数</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>小说标题</label>
+                        <input type="text" id="title" placeholder="留空则自动提取">
+                    </div>
+                    <div class="form-group">
+                        <label>剧本类型</label>
+                        <select id="genre">
+                            <option value="剧情">剧情</option>
+                            <option value="悬疑">悬疑</option>
+                            <option value="喜剧">喜剧</option>
+                            <option value="爱情">爱情</option>
+                            <option value="科幻">科幻</option>
+                            <option value="动作">动作</option>
+                            <option value="恐怖">恐怖</option>
+                            <option value="历史">历史</option>
+                            <option value="战争">战争</option>
+                            <option value="奇幻">奇幻</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>模型</label>
+                        <select id="model">
+                            <optgroup label="DeepSeek">
+                                <option value="deepseek-ai/DeepSeek-V3" selected>DeepSeek-V3</option>
+                                <option value="deepseek-ai/DeepSeek-R1">DeepSeek-R1</option>
+                            </optgroup>
+                            <optgroup label="Qwen">
+                                <option value="Qwen/Qwen3-235B-A22B">Qwen3-235B</option>
+                                <option value="Qwen/Qwen3-32B">Qwen3-32B</option>
+                                <option value="Qwen/Qwen2.5-72B-Instruct">Qwen2.5-72B</option>
+                            </optgroup>
+                            <optgroup label="Meta Llama">
+                                <option value="meta-llama/Llama-3.3-70B-Instruct">Llama-3.3-70B</option>
+                                <option value="meta-llama/Llama-3.1-8B-Instruct">Llama-3.1-8B</option>
+                            </optgroup>
+                            <optgroup label="GLM">
+                                <option value="THUDM/glm-4-9b-chat">GLM-4-9B</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>温度 (创造力)</label>
+                        <div class="slider-group">
+                            <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                            <span class="slider-value" id="tempValue">0.7</span>
+                        </div>
+                        <div class="slider-labels">
+                            <span>严谨</span>
+                            <span>平衡</span>
+                            <span>创意</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" id="convertBtn" onclick="startConvert()">
+                🚀 开始转换
+            </button>
+
+            <div id="progressArea" style="display:none;">
+                <div class="progress-bar">
+                    <div class="fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">准备中...</div>
+            </div>
+        </div>
+
+        <!-- 底部：结果展示 -->
+        <div class="panel result-area" id="resultArea" style="display:none;">
+            <div class="panel-header">
+                <h2>📄 转换结果</h2>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-secondary btn" onclick="toggleResult()" style="width:auto;padding:6px 12px;" id="toggleBtn">
+                        🔽 展开
+                    </button>
+                    <button class="btn-secondary btn" onclick="copyYaml()" style="width:auto;padding:6px 12px;">
+                        📋 复制
+                    </button>
+                    <button class="btn-secondary btn" onclick="downloadYaml()" style="width:auto;padding:6px 12px;">
+                        💾 下载
+                    </button>
+                </div>
+            </div>
+            <div id="resultBody" style="display:none;">
+                <div class="result-toolbar">
+                    <span style="font-size:12px;color:var(--text-dim);">YAML 格式剧本</span>
+                </div>
+                <div class="result-content">
+                    <pre id="yamlOutput"></pre>
+                </div>
+                <div class="stats" id="statsArea">
+                    <div class="stat-item">
+                        <span class="value" id="statChapters">0</span>
+                        <span class="label">章节</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="value" id="statScenes">0</span>
+                        <span class="label">场景</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="value" id="statDialogue">0</span>
+                        <span class="label">对话</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentYaml = '';
+        let isConverting = false;
+
+        // 展开/收起结果
+        function toggleResult() {
+            const body = document.getElementById('resultBody');
+            const btn = document.getElementById('toggleBtn');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                btn.innerHTML = '🔼 收起';
+            } else {
+                body.style.display = 'none';
+                btn.innerHTML = '🔽 展开';
+            }
+        }
+
+        // 文件上传
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('novelText').value = event.target.result;
+                updateCharCount();
+                showToast('success', '文件已加载: ' + file.name);
+            };
+            reader.readAsText(file);
+        });
+
+        // 字数统计
+        document.getElementById('novelText').addEventListener('input', updateCharCount);
+
+        function updateCharCount() {
+            const text = document.getElementById('novelText').value;
+            document.getElementById('charCount').textContent = text.length + ' 字';
+        }
+
+        // 温度滑块
+        document.getElementById('temperature').addEventListener('input', function() {
+            document.getElementById('tempValue').textContent = this.value;
+        });
+
+        // 加载示例
+        async function loadSample() {
+            try {
+                const response = await fetch('/examples/sample_novel.txt');
+                if (response.ok) {
+                    const text = await response.text();
+                    document.getElementById('novelText').value = text;
+                    updateCharCount();
+                    showToast('success', '示例小说已加载');
+                } else {
+                    showToast('error', '无法加载示例文件');
+                }
+            } catch (e) {
+                showToast('error', '加载示例失败: ' + e.message);
+            }
+        }
+
+        // 开始转换
+        async function startConvert() {
+            if (isConverting) return;
+
+            const text = document.getElementById('novelText').value.trim();
+
+            if (!text) {
+                showToast('error', '请输入小说文本');
+                return;
+            }
+
+            isConverting = true;
+            const btn = document.getElementById('convertBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ 转换中...';
+
+            const progressArea = document.getElementById('progressArea');
+            progressArea.style.display = 'block';
+            updateProgress(0, '正在解析小说结构...');
+
+            const requestData = {
+                title: document.getElementById('title').value.trim(),
+                genre: document.getElementById('genre').value,
+                text: text,
+                model: document.getElementById('model').value,
+                temperature: parseFloat(document.getElementById('temperature').value)
+            };
+
+            try {
+                updateProgress(10, '正在调用 AI 模型...');
+
+                const response = await fetch('/api/convert', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                updateProgress(80, '正在生成 YAML...');
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentYaml = result.yaml;
+                    document.getElementById('yamlOutput').textContent = result.yaml;
+                    document.getElementById('statChapters').textContent = result.stats.chapters;
+                    document.getElementById('statScenes').textContent = result.stats.scenes;
+                    document.getElementById('statDialogue').textContent = result.stats.dialogue;
+                    document.getElementById('resultArea').style.display = 'block';
+                    document.getElementById('resultBody').style.display = 'block';
+                    document.getElementById('toggleBtn').innerHTML = '🔼 收起';
+
+                    updateProgress(100, '转换完成！');
+                    showToast('success', '剧本转换成功！');
+
+                    // 滚动到结果
+                    setTimeout(() => {
+                        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                } else {
+                    showToast('error', result.error || '转换失败');
+                }
+            } catch (e) {
+                showToast('error', '请求失败: ' + e.message);
+            } finally {
+                isConverting = false;
+                btn.disabled = false;
+                btn.innerHTML = '🚀 开始转换';
+                setTimeout(() => {
+                    progressArea.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        // 更新进度
+        function updateProgress(percent, text) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        // 复制 YAML
+        function copyYaml() {
+            if (!currentYaml) return;
+            navigator.clipboard.writeText(currentYaml).then(() => {
+                showToast('success', '已复制到剪贴板');
+            }).catch(() => {
+                // fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = currentYaml;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('success', '已复制到剪贴板');
+            });
+        }
+
+        // 下载 YAML
+        function downloadYaml() {
+            if (!currentYaml) return;
+            const title = document.getElementById('title').value.trim() || 'script';
+            const blob = new Blob([currentYaml], { type: 'text/yaml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title + '.yaml';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('success', '文件已下载');
+        }
+
+        // Toast 提示
+        function showToast(type, message) {
+            // 移除旧的
+            document.querySelectorAll('.toast').forEach(t => t.remove());
+
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 页面加载时从配置文件读取默认值
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/api/config');
+                if (response.ok) {
+                    const config = await response.json();
+                    if (config['model']) {
+                        document.getElementById('model').value = config['model'];
+                    }
+                    if (config['genre']) {
+                        document.getElementById('genre').value = config['genre'];
+                    }
+                    if (config['temperature']) {
+                        document.getElementById('temperature').value = config['temperature'];
+                        document.getElementById('tempValue').textContent = config['temperature'];
+                    }
+                }
+            } catch (e) {
+                console.log('读取配置文件失败');
+            }
+        });
+    </script>
+</body>
+</html>
