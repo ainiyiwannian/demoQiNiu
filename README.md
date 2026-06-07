@@ -4,7 +4,7 @@
 
 ## 演示视频
 
-https://github.com/ainiyiwannian/demoQiNiu/assets/demo.mp4
+<video src="https://raw.githubusercontent.com/ainiyiwannian/demoQiNiu/main/docs/demo.mp4" controls width="600"></video>
 
 > 如果视频无法播放，请 [点击下载](docs/demo.mp4) 后本地观看。
 
