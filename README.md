@@ -4,7 +4,7 @@
 
 ## 演示视频
 
-> 如果视频无法播放，请 [点击下载](docs/demo.mp4) 后本地观看。
+[![演示视频](https://img.shields.io/badge/▶_观看演示视频-Bilibili-pink)](https://www.bilibili.com/video/BV183Et65EzN/)
 
 ## 功能特性
 
