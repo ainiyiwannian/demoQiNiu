@@ -2,6 +2,12 @@
 
 将小说文本自动转换为结构化 YAML 剧本，让作者快速获得可编辑、可进一步打磨的剧本初稿。
 
+## 演示视频
+
+https://github.com/ainiyiwannian/demoQiNiu/assets/demo.mp4
+
+> 如果视频无法播放，请 [点击下载](docs/demo.mp4) 后本地观看。
+
 ## 功能特性
 
 - **智能章节识别**：自动识别多种章节标题格式（第X章、Chapter X 等）
